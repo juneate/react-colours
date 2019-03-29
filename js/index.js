@@ -1,11 +1,14 @@
+// NOTE TO STUDENTS: this document should be read bottom-up
+
 // Include "useState" as part of this project
 const { useState } = React;
 
+// Component: controls a single Channel of each swatch (R, G or B)
 function Channel(props) {
-    let [rgbNum, setRgb] = useState(props.rgb);
-    const increaseValue = () => setRgb(rgbNum + 1);
-    const decreaseValue = () => setRgb(rgbNum - 1);
-    const changeValue = ({target}) => setRgb(Number(target.value));
+    let [rgbNum, setRgb] = useState(props.rgb);         // Defines rgbNum as a state variable
+    const increaseValue = () => setRgb(rgbNum + 1);     // Increase rgbNum by 1
+    const decreaseValue = () => setRgb(rgbNum - 1);     // Decrease rgbNum by 1
+    const changeValue = ({target}) => setRgb(Number(target.value));     // If the value in the box changes, update rgbNum
 
     return (
         <div class="channel">
@@ -16,7 +19,9 @@ function Channel(props) {
     );
 }
 
+// Component: a Colour (swatch) row inside of a palette column
 function Colour(props) {
+    // Define a background-color for the swatch
     const myStyles = {
         backgroundColor: `rgb(${props.red},${props.green},${props.blue})`
     }
@@ -32,6 +37,7 @@ function Colour(props) {
     );
 }
 
+// Component: a single colour Palette column
 function Palette() {
     return (
       <ul class="palette">
@@ -42,4 +48,5 @@ function Palette() {
     );
 }
 
+// Create an instance of the Palette Component, put it into "#app" (index.html)
 ReactDOM.render(<Palette />, document.getElementById('app') );
