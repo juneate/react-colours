@@ -49,15 +49,34 @@ function Colour(props) {
 }
 
 // Component: a single colour Palette column
-function Palette() {
+function Palette(props) {
+
+    const allSwatches = props.swatches.map(
+      (swatch, i) => 
+        <Colour key={i} red={swatch.r} green={swatch.g} blue={swatch.b} />
+    );
+
     return (
       <ul class="palette">
-        <Colour red={255} green={0} blue={0} />
-        <Colour red={0} green={255} blue={0} />
-        <Colour red={0} green={0} blue={255} />
+        { allSwatches }
       </ul>
     );
 }
 
+function App() {
+
+  const startingData = [
+    {r: 255, g: 0, b: 255},
+    {r: 255, g: 255, b: 0},
+    {r: 0, g: 255, b: 255},
+    {r: 255, g: 123, b: 0},
+  ];
+
+  return (
+    <Palette swatches={startingData} />
+  );
+}
+
+
 // Create an instance of the Palette Component, put it into "#app" (index.html)
-ReactDOM.render(<Palette />, document.getElementById('app') );
+ReactDOM.render(<App />, document.getElementById('app') );
