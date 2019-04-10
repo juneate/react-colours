@@ -1,7 +1,10 @@
 // NOTE TO STUDENTS: this document should be read bottom-up
 
 // Include "useState" as part of this project
-const { useState } = React;
+const { useState, useContext } = React;
+
+// Create a Context container
+const ColourContext = React.createContext([]);
 
 // Component: controls a single Channel of each swatch (R, G or B)
 function Channel(props) {
@@ -16,9 +19,9 @@ function Channel(props) {
 
     return (
         <div class="channel">
-            <button type="button" class="btn up" onClick={e => updateRgb(rgbNum + 10)}>+</button>
+            <button type="button" class="btn up" onClick={e => updateRgb(rgbNum + 5)}>+</button>
             <input type="text" class="txt" value={rgbNum} onChange={e => updateRgb( e.target.value )} />
-            <button type="button" class="btn down" onClick={e => updateRgb(rgbNum - 10)}>-</button>
+            <button type="button" class="btn down" onClick={e => updateRgb(rgbNum - 5)}>-</button>
         </div>
     );
 }
@@ -29,6 +32,11 @@ function Colour(props) {
     const [r, setR] = useState(props.red);
     const [g, setG] = useState(props.green);
     const [b, setB] = useState(props.blue);
+
+    let colourData = useContext(ColourContext);
+    colourData.data[props.index] = {r: r, g: g, b: b};
+    colourData.update();
+    console.log(colourData);
 
     console.log(`New colour is: rgb(${r},${g},${b})`)
 
@@ -53,7 +61,7 @@ function Palette(props) {
 
     const allSwatches = props.swatches.map(
       (swatch, i) => 
-        <Colour key={i} red={swatch.r} green={swatch.g} blue={swatch.b} />
+        <Colour key={i} index={i} red={swatch.r} green={swatch.g} blue={swatch.b} />
     );
 
     return (
@@ -72,10 +80,17 @@ function App() {
     {r: 255, g: 123, b: 0},
   ];
 
-  Palette();
+
+
+  const updateLocalStorage = () => {
+    let colourData = useContext(ColourContext);
+    console.log('Updated: ' + colourData)
+  }
   
   return (
-    <Palette swatches={startingData} />
+    <ColourContext.Provider value={{data:startingData, update:updateLocalStorage}}>
+      <Palette swatches={startingData} />
+    </ColourContext.Provider>
   );
 }
 
