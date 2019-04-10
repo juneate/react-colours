@@ -3,8 +3,8 @@
 // Include "useState" as part of this project
 const { useState, useContext } = React;
 
-// Create a Context container
-const ColourContext = React.createContext([]);
+// Create a Context "Store"
+const ColourContext = React.createContext({});
 
 // Component: controls a single Channel of each swatch (R, G or B)
 function Channel(props) {
@@ -33,10 +33,15 @@ function Colour(props) {
     const [g, setG] = useState(props.green);
     const [b, setB] = useState(props.blue);
 
+    // Make the Colour Component a "consumer" of the ColourContext data
+    // useContext retuns the "value" from the ColourContext store
     let colourData = useContext(ColourContext);
+    
+    // update the "index" from the dataset that matches the index of this colour swatch
     colourData.data[props.index] = {r: r, g: g, b: b};
+
+    // Now update the "database"
     colourData.update();
-    console.log(colourData);
 
     console.log(`New colour is: rgb(${r},${g},${b})`)
 
@@ -59,6 +64,7 @@ function Colour(props) {
 // Component: a single colour Palette column
 function Palette(props) {
 
+    // Add an "index" to the Colour component so we know which item it is from the dataset
     const allSwatches = props.swatches.map(
       (swatch, i) => 
         <Colour key={i} index={i} red={swatch.r} green={swatch.g} blue={swatch.b} />
@@ -73,22 +79,33 @@ function Palette(props) {
 
 function App() {
 
-  const startingData = [
+  // Some default swatches
+  const defaultData = [
     {r: 255, g: 0, b: 255},
     {r: 255, g: 255, b: 0},
     {r: 0, g: 255, b: 255},
-    {r: 255, g: 123, b: 0},
   ];
 
+  // Either pull some data from our localStorage, OR just use the "defaultData" above
+  const startingData = JSON.parse(localStorage.getItem('colours')) || defaultData;
 
-
+  // A new function used to update the database
   const updateLocalStorage = () => {
-    let colourData = useContext(ColourContext);
-    console.log('Updated: ' + colourData)
-  }
+    console.log(`Time to update the database!`);
   
+    // Access our local "Context" store
+    let colourData = useContext(ColourContext);
+    
+    // Use the data to set a string version of our app to the browser
+    localStorage.setItem('colours', JSON.stringify(colourData.data));
+  };
+  
+  // What two things do we want to store globally to the Provider? Put them in an object
+  let theData = { data:startingData, update:updateLocalStorage };
+
+  // Wrap the App in a "Provider", pass it the values you need to share
   return (
-    <ColourContext.Provider value={{data:startingData, update:updateLocalStorage}}>
+    <ColourContext.Provider value={theData}>
       <Palette swatches={startingData} />
     </ColourContext.Provider>
   );
