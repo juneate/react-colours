@@ -4,7 +4,7 @@
 const { useState } = React;
 
 // Component: controls a single Channel of each swatch (R, G or B)
-function Channel(props) {
+const Channel = (props) => {
     let [rgbNum, setRgb] = useState(props.rgb);         // Defines rgbNum as a state variable
     const increaseValue = () => setRgb(rgbNum + 1);     // Increase rgbNum by 1
     const decreaseValue = () => setRgb(rgbNum - 1);     // Decrease rgbNum by 1
@@ -17,10 +17,10 @@ function Channel(props) {
             <button type="button" class="btn down" onClick={decreaseValue}>-</button>
         </div>
     );
-}
+};
 
 // Component: a Colour (swatch) row inside of a palette column
-function Colour(props) {
+const Colour = (props) => {
     // Define a background-color for the swatch
     const myStyles = {
         backgroundColor: `rgb(${props.red},${props.green},${props.blue})`
@@ -35,10 +35,10 @@ function Colour(props) {
           <div>);</div>
         </li>
     );
-}
+};
 
 // Component: a single colour Palette column
-function Palette() {
+const Palette = () => {
     return (
       <ul class="palette">
         <Colour red={255} green={0} blue={0} />
@@ -46,7 +46,7 @@ function Palette() {
         <Colour red={0} green={0} blue={255} />
       </ul>
     );
-}
+};
 
 // Create an instance of the Palette Component, put it into "#app" (index.html)
 ReactDOM.render(<Palette />, document.getElementById('app') );
