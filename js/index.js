@@ -62,7 +62,7 @@ const Colour = (props) => {
 };
 
 // Component: a single colour Palette column
-const Palette = () => {
+const Palette = (props) => {
 
     // Add an "index" to the Colour component so we know which item it is from the dataset
     const allSwatches = props.swatches.map(
