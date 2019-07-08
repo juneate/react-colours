@@ -42,7 +42,7 @@ const Colour = (props) => {
 
     // Now update the "database"
     colourData.update();
-
+    
     console.log(`New colour is: rgb(${r},${g},${b})`)
 
     // Define a background-color for the swatch
